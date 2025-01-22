@@ -45,7 +45,7 @@ CREATE DATABASE adyapana;
 ```
 
 ### 3. Configure database connection
-In your project, open the database connection file (e.g., `MySQL.java` in Model Package) and update the following fields:
+In your project, open the database connection file (`MySQL.java` in Model Package) and update the following fields:
 
 - **URL**: The URL for your MySQL connection (e.g., `jdbc:mysql://localhost:3306/adyapana`).
 - **USERNAME**: The MySQL username (e.g., `root`).
