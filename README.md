@@ -14,8 +14,6 @@ A simple Java-based Student Management System designed to manage student records
 - **Backup and Restore**: Backup and restore database through a graphical interface.
 - **User Authentication**: Admin login for secure access.
 
-## Screenshots
-(Provide a few screenshots of the application here, showing key features.)
 
 ## Tech Stack
 - **Java**: For the backend logic and GUI using Swing.
