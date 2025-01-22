@@ -1,4 +1,3 @@
-Sure! Here's a basic README template you can use for your **Student Management System** project. This README will help other users understand what the project is about, how to set it up, and how to use it.
 
 ---
 
