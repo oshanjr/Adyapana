@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import model.MySQL;
@@ -28,8 +29,50 @@ public class Attendance extends javax.swing.JFrame {
     public Attendance() {
         initComponents();
         loadStudent();
+        SwingUtilities.invokeLater(() -> jTextField1.requestFocus());
+
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                    String scannedId = jTextField1.getText();
+
+//                    JOptionPane.showMessageDialog(null, "Successfully Marked Attendance for " + scannedId);
+//                    jTextField1.setText("");
+                    // Check if Enter key is pressed
+                    if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                        // Get the entered student ID from jTextField1
+                        String studentId = jTextField1.getText().trim();
+
+                        boolean rowFound = false;
+
+                        // Search for the row that matches the entered student ID (assuming it's in the first column)
+                        for (int i = 0; i < jTable2.getRowCount(); i++) {
+                            String rowStudentId = jTable2.getValueAt(i, 0).toString(); // Assuming student ID is in the first column
+
+                            if (rowStudentId.equals(studentId)) {
+                                // Select the row and stop searching
+                                jTable2.setRowSelectionInterval(i, i);
+                                rowFound = true;
+                                break;
+                            }
+                        }
+
+                        // If no match is found, show a message
+                        if (!rowFound) {
+                            JOptionPane.showMessageDialog(null, "Student ID not found.");
+                        }
+                    }
+
+//                    jButton2.doClick();
+                    markAtt();
+                    jTextField1.setText("");
+
+                }
+            }
+        });
+
     }
-   
 
     private void loadStudent() {
 
@@ -62,7 +105,33 @@ public class Attendance extends javax.swing.JFrame {
         }
 
     }
-    
+
+    private void markAtt() {
+        try {
+            // Get the selected row index
+            int selectedRow = jTable2.getSelectedRow();
+
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(null, "Please select a student to mark attendance.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String st_id = jTable2.getValueAt(selectedRow, 0).toString();
+
+            String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+            String query = "UPDATE `student` SET `date` = '" + currentDate + "' WHERE `st_id` = '" + st_id + "';";
+            MySQL.execute(query);
+
+            DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+            model.setValueAt(currentDate, selectedRow, 5); // Assuming the date column is at index 5
+
+//            JOptionPane.showMessageDialog(null, "Attendance marked for student ID: " + st_id, "Success", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error marking attendance: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -116,6 +185,9 @@ public class Attendance extends javax.swing.JFrame {
         }
 
         jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField1KeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField1KeyReleased(evt);
             }
@@ -188,38 +260,34 @@ public class Attendance extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       
+
         try {
             // Get the selected row index
             int selectedRow = jTable2.getSelectedRow();
-            
+
             if (selectedRow == -1) {
                 JOptionPane.showMessageDialog(null, "Please select a student to mark attendance.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
-            
+
             String st_id = jTable2.getValueAt(selectedRow, 0).toString();
-            
-    
+
             String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
-            
             String query = "UPDATE `student` SET `date` = '" + currentDate + "' WHERE `st_id` = '" + st_id + "';";
             MySQL.execute(query);
 
-            
             DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
             model.setValueAt(currentDate, selectedRow, 5); // Assuming the date column is at index 5
-            
-            JOptionPane.showMessageDialog(null, "Attendance marked for student ID: " + st_id , "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            JOptionPane.showMessageDialog(null, "Attendance marked for student ID: " + st_id, "Success", JOptionPane.INFORMATION_MESSAGE);
 
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error marking attendance: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-    
-       
+
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
@@ -228,6 +296,10 @@ public class Attendance extends javax.swing.JFrame {
         jTable2.setRowSorter(obj1);
         obj1.setRowFilter(RowFilter.regexFilter(jTextField1.getText()));
     }//GEN-LAST:event_jTextField1KeyReleased
+
+    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
+
+    }//GEN-LAST:event_jTextField1KeyPressed
 
     /**
      * @param args the command line arguments

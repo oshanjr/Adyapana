@@ -47,6 +47,8 @@ public class StudentReg extends javax.swing.JFrame {
         initComponents();
         loadStudent();
         jButton2.setEnabled(false);
+        
+       
 
     }
 
