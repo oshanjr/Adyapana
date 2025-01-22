@@ -34,7 +34,7 @@ Before you begin, make sure you have the following installed:
 Clone this repository to your local machine using the following command:
 
 ```bash
-git clone https://github.com/your-username/Adyapana.git
+git clone https://github.com/oshanjr/Adyapana.git
 ```
 
 ### 2. Set up the database
