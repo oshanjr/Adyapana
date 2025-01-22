@@ -256,6 +256,7 @@ public class StudentReg extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setAlwaysOnTop(true);
         setResizable(false);
 
         jButton1.setBackground(new java.awt.Color(0, 102, 204));
